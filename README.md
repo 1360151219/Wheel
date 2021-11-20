@@ -4,6 +4,6 @@
 
 ## 目前轮子
 
-- PriorityQueue
+- [PriorityQueue](https://github.com/1360151219/Wheel/blob/master/PriorityQueue.ts)
 
 一个简单的模拟的并发队列
