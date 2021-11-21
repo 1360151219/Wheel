@@ -4,6 +4,9 @@
 
 ## 目前轮子
 
+一个简单的模拟的并发队列
 - [PriorityQueue](https://github.com/1360151219/Wheel/blob/master/PriorityQueue.ts)
 
-一个简单的模拟的并发队列
+
+一个事件总线类的实现
+- [EventEmitter](https://github.com/1360151219/Wheel/blob/master/EventEmitter.ts)
