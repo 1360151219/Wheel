@@ -5,8 +5,13 @@
 ## 目前轮子
 
 一个简单的模拟的并发队列
+
 - [PriorityQueue](https://github.com/1360151219/Wheel/blob/master/PriorityQueue.ts)
 
-
 一个事件总线类的实现
+
 - [EventEmitter](https://github.com/1360151219/Wheel/blob/master/EventEmitter.ts)
+
+使用 typescript 装饰器实现防抖节流功能
+
+- [Debounce&Throttle](https://github.com/1360151219/Wheel/blob/master/Debounce.ts)
