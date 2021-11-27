@@ -48,27 +48,31 @@ export const HeadThrottle = function (delay = 500) {
     }
 }
 
-
 export const Throttle = function (delay = 500) {
-    let last = 0
-    return function (target: any, key: string, descriptor: PropertyDescriptor) {
-        const method = descriptor.value
+    let last = 0;
+    let timeout: number | null;
+    return function (
+        target: any,
+        key: string,
+        descriptor: PropertyDescriptor
+    ) {
+        const method = descriptor.value;
         descriptor.value = function () {
-            let now = Date.now()
-            let remain = delay - (now - last)
-            // 若now-last不足delay的时候
-            if (remain >= 0) {
-                setTimeout(() => {
-                    method.call(this, arguments)
-                    last = now
-                }, remain)
-            } else {
-                method.call(this, arguments)
-                last = now
+            let now = Date.now();
+            let remain = delay - (now - last);
+            if (remain < 0) {
+                method.call(this, arguments);
+                last = Date.now();
+            } else if (!timeout) {
+                timeout = setTimeout(() => {
+                    method.call(this, arguments);
+                    timeout = null;
+                    last = Date.now();
+                }, remain);
             }
-        }
-    }
-}
+        };
+    };
+};
 
 // 测试
 // class C {
