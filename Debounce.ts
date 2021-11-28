@@ -3,7 +3,10 @@
  * @Date: 2021-11-26 20:35:32
  * @Description: 防抖节流---TypeScript装饰器实现
  */
-
+interface ThrottleOptions {
+    leading: boolean;
+    trailing: boolean;
+}
 export const Debounce = function (delay = 500) {
     let timeout: number
     return function (target: any, key: string, descriptor: PropertyDescriptor) {
@@ -48,7 +51,7 @@ export const HeadThrottle = function (delay = 500) {
     }
 }
 
-export const Throttle = function (delay = 500) {
+export const ThrottleMixin = function (delay = 500) {
     let last = 0;
     let timeout: number | null;
     return function (
@@ -74,6 +77,35 @@ export const Throttle = function (delay = 500) {
     };
 };
 
+export const Throttle = function (
+    delay = 500,
+    options: ThrottleOptions = { leading: true, trailing: true }
+) {
+    let last = 0;
+    let timeout: number | null;
+    return function (
+        target: any,
+        key: string,
+        descriptor: PropertyDescriptor
+    ) {
+        const method = descriptor.value;
+        descriptor.value = function () {
+            let now = Date.now();
+            if (last === 0 && !options.leading) last = now;
+            let remain = delay - (now - last);
+            if (remain < 0) {
+                method.call(this, arguments);
+                last = Date.now();
+            } else if (!timeout && options.trailing) {
+                timeout = setTimeout(() => {
+                    method.call(this, arguments);
+                    timeout = null;
+                    last = options.leading ? Date.now() : 0;
+                }, remain);
+            }
+        };
+    };
+};
 // 测试
 // class C {
 //   @Debounce(1000)
