@@ -1,0 +1,29 @@
+/* eslint-disable */
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "esnext",
+    "strict": false,
+    "jsx": "preserve",
+    "importHelpers": true,
+    "moduleResolution": "node",
+    "strictPropertyInitialization": false,
+    "noImplicitAny": false,
+    "allowJs": true,
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "sourceMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+  },
+  "include": ["**.ts"],
+  "exclude": ["node_modules/**"],
+  "linterOptions": {
+    "exclude": ["node_modules/**"]
+  }
+}
