@@ -1,7 +1,9 @@
 <template>
   <div class="home">
     <div class="waterfall">
-      <Waterfall :imgsArr="imgs" @reachBottomed="reachBottomed" />
+      <Waterfall :imgsArr="imgs" @reachBottomed="reachBottomed">
+        <template slot="loading"> <span>loading</span> </template>
+      </Waterfall>
     </div>
   </div>
 </template>
@@ -129,6 +131,6 @@ export default class Home extends Vue {
 <style scoped>
 .home,
 .waterfall {
-  height: 600px;
+  height: 97vh;
 }
 </style>

@@ -1,12 +1,15 @@
   <template>
-  <div class="vue-waterfall-container">
+  <div
+    class="vue-waterfall-container"
+    :style="{ width: width + 'px', height: height + 'px' }"
+  >
     <div
       class="loading ball-beat"
       v-show="!loaded"
       :class="{ first: firstLoading }"
     >
       <slot name="loading" />
-      <template v-if="1">
+      <template v-if="!hasLoadingSlot">
         <div class="dot" v-for="n in loadingDotCount" :key="n"></div>
       </template>
     </div>
@@ -33,6 +36,8 @@ export default class WaterFall extends Vue {
   imgsArr!: imgItem[];
   @Prop()
   width?: number; // 瀑布流容器总宽度
+  @Prop()
+  height?: number; // 瀑布流容器总长度
   @Prop({ default: 10 })
   gapWidth!: number;
   @Prop({ default: 3 })
@@ -70,12 +75,18 @@ export default class WaterFall extends Vue {
       });
     });
   }
+  get hasLoadingSlot() {
+    return !!this.$slots.loading;
+  }
+  /**
+   * @description: 预加载
+   */
   preload(): void {
     this.imgsArr.forEach((item, index) => {
       if (!item.src) {
+        // 支持无图模式
         this.imgsArr[index]._height = 0;
         this.loadedCnt++;
-        // 支持无图模式
         if (this.loadedCnt == this.imgsArr.length) {
           this.$emit("preloaded");
         }
@@ -90,16 +101,19 @@ export default class WaterFall extends Vue {
           e.type == "load"
             ? Math.round(this.imgWidth * (oImg.height / oImg.width))
             : this.imgWidth;
-        // if (e.type == "error") {
-        //   this.imgsArr[index]._error = true;
-        //   this.$emit("imgError", this.imgsArr[index]);
-        // }
+        if (e.type == "error") {
+          this.imgsArr[index]._error = true;
+          this.$emit("imgError", this.imgsArr[index]);
+        }
         if (this.loadedCnt === this.imgsArr.length) {
           this.$emit("preloaded");
         }
       };
     });
   }
+  /**
+   * @description: 获取列宽度
+   */
   get ColWidth(): number {
     return this.imgWidth + (this.gapWidth as number);
   }
@@ -117,13 +131,17 @@ export default class WaterFall extends Vue {
     }
     this.preload();
   }
-
+  /**
+   * @description:计算列数
+   */
   calcuCols(): number {
     let waterfallWidth = this.width ? this.width : window.innerWidth;
     let cols = Math.max(Math.floor(waterfallWidth / this.ColWidth), 1);
     return cols;
   }
-  /* 响应式 */
+  /**
+   * @description:响应式
+   */
   response() {
     let old = this.cols;
     this.cols = this.calcuCols();
@@ -137,7 +155,6 @@ export default class WaterFall extends Vue {
     const scrollTop = scrollEl.scrollTop;
     const height = scrollEl.offsetHeight;
     const minHeight = Math.min(...this.colsHeightArr);
-
     if (scrollTop + height - minHeight > this.reachBottomDistance) {
       this.$emit("reachBottomed");
       this.loaded = false;
@@ -153,6 +170,7 @@ export default class WaterFall extends Vue {
     for (let i = this.beginIndex; i < this.imgsArr.length; i++) {
       if (!this.imgBoxEls[i]) return;
       height = this.imgBoxEls[i].offsetHeight;
+
       // 第一行
       if (i < this.cols) {
         this.colsHeightArr.push(height);
