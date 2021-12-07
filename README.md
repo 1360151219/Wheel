@@ -17,3 +17,7 @@
 > 注意这里 Options 配置中`leading`和`trailing`不能同时设置为`false`,因为如果都设置为`false`后，不触发事件后最后的一次`last=0`也无法执行，导致再次触发事件的时候会立即执行，违背了`leading=false`的本意。
 
 - [Debounce&Throttle](https://github.com/1360151219/Wheel/blob/master/Debounce.ts)
+
+基于Vue实现的一个瀑布流组件
+
+- [瀑布流](https://github.com/1360151219/Wheel/tree/master/Waterfall-Image/waterfall)
