@@ -2,7 +2,12 @@
   <div class="home">
     <div class="waterfall">
       <Waterfall :imgsArr="imgs" @reachBottomed="reachBottomed" @click="click">
-        <template slot="header"> <span>header</span> </template>
+        <template v-slot:header="item">
+          <span>{{ item.data.info + "Header" }}</span>
+        </template>
+        <template v-slot:footer="item">
+          <span>{{ item.data.info + "Footer" }}</span>
+        </template>
       </Waterfall>
     </div>
   </div>
@@ -41,6 +46,7 @@ export default class Home extends Vue {
       src: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fwww.desktx.com%2Fd%2Ffile%2Fwallpaper%2Fanimals%2F20160822%2F05128add3de7bc5acfa3a38612673e1d.jpg&refer=http%3A%2F%2Fwww.desktx.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638440861&t=667c221c38da5abdb0ed7d34d87ef564",
       href: "https://www.baidu.com",
       info: "一些图片描述文字",
+      hasFooter: true,
     },
     {
       src: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fwww.yidianzhidao.com%2FUploadFiles%2Fimg_1_1195934273_1809290298_26.jpg&refer=http%3A%2F%2Fwww.yidianzhidao.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638440861&t=220f9c21856a2bb0cc71f76ba0b5e2cc",
@@ -127,6 +133,21 @@ export default class Home extends Vue {
     },
     {
       src: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fwww.goupuzi.com%2Fnewatt%2FMon_2004%2F1_183281_b959196b41fb01e.jpg&refer=http%3A%2F%2Fwww.goupuzi.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638441314&t=663a187a9631164c450e2b3b3e1b8d92",
+      href: "https://www.baidu.com",
+      info: "一些图片描述文字",
+    },
+    {
+      src: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2F982c57d5acaf36b73a10cbbf00abdad7b5ab9c031baa3-DWsofR_fw658&refer=http%3A%2F%2Fhbimg.b0.upaiyun.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1641627198&t=0920cac407a218b4973c7b8eaabdf94a",
+      href: "https://www.baidu.com",
+      info: "一些图片描述文字",
+    },
+    {
+      src: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20180803%2F20%2F1533298792-mvVEILhxXG.jpg&refer=http%3A%2F%2Fimage.biaobaiju.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1641627198&t=5430d5cf9473db81ffbb46421053661b",
+      href: "https://www.baidu.com",
+      info: "一些图片描述文字",
+    },
+    {
+      src: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20180211%2F00%2F1518279689-FjbTySEJle.jpg&refer=http%3A%2F%2Fimage.biaobaiju.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1641627198&t=bad1f8b3bd3cf8f03d51156486086d9c",
       href: "https://www.baidu.com",
       info: "一些图片描述文字",
     },

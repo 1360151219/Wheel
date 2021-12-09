@@ -15,6 +15,7 @@
     <div class="vue-scroll-container" ref="scrollEl">
       <div
         class="imgBox"
+        :class="[boxAnimationClass, boxStyleClass]"
         v-for="(item, idx) in imgsArr_c"
         :key="idx"
         @click="handleClick($event, { value: item, index: idx })"
@@ -29,6 +30,9 @@
             :width="imgWidth"
             :height="item._height ? item._height + 'px' : false"
           />
+          <div class="img-box-footer" v-if="item.hasFooter">
+            <slot name="footer" :data="item"></slot>
+          </div>
         </div>
       </div>
     </div>
@@ -48,6 +52,8 @@ export default class WaterFall extends Vue {
   height?: number; // 瀑布流容器总长度
   @Prop({ default: 10 })
   gapWidth!: number;
+  @Prop({ default: 10 })
+  gapHeight!: number;
   @Prop({ default: 3 })
   loadingDotCount!: number;
   @Prop({ default: 100 })
@@ -56,6 +62,10 @@ export default class WaterFall extends Vue {
   imgWidth!: number;
   @Prop()
   imgClass!: Array<string>; // 图片容器的类名数组
+  @Prop({ default: "defalut-box-animation" })
+  boxAnimationClass!: string[];
+  @Prop({ default: "defalut-box-style" })
+  boxStyleClass!: string[];
   //声明loadedCount变量记录加载完毕的数量，为了和imgsArr大小作比较，通知加载完毕（包括无图、加载完毕，加载失败的情况）
   loadedCnt = 0;
   loaded = false; // 正在预加载中，显示加载动画
@@ -124,7 +134,7 @@ export default class WaterFall extends Vue {
    * @description: 获取列宽度
    */
   get ColWidth(): number {
-    return this.imgWidth + (this.gapWidth as number);
+    return this.imgWidth + this.gapWidth;
   }
   reset() {
     this.imgsArr_c = [];
@@ -178,9 +188,9 @@ export default class WaterFall extends Vue {
       } else {
         let minHeight = Math.min(...this.colsHeightArr);
         let minIndex = this.colsHeightArr.indexOf(minHeight);
-        top = minHeight;
+        top = minHeight + this.gapHeight;
         left = colWidth * minIndex;
-        this.colsHeightArr[minIndex] += height;
+        this.colsHeightArr[minIndex] += height + this.gapHeight;
       }
       this.imgBoxEls[i].style.left = left + "px";
       this.imgBoxEls[i].style.top = top + "px";
@@ -232,10 +242,11 @@ export default class WaterFall extends Vue {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    top: 10px;
+    bottom: 10px;
     z-index: 999;
     &.first {
       top: 50%;
+      bottom: initial;
       transform: translate(-50%, 50%);
     }
     &.ball-beat {
@@ -264,9 +275,17 @@ export default class WaterFall extends Vue {
     -webkit-overflow-scrolling: touch;
     .imgBox {
       position: absolute;
-      animation: show-item 0.4s;
-      transition: top 0.6s, left 0.6s;
-      transition-delay: 0.5s;
+      box-sizing: border-box;
+      &.defalut-box-animation {
+        animation: show-item 0.4s;
+        transition: top 0.6s, left 0.6s;
+        transition-delay: 0.5s;
+      }
+      &.defalut-box-style {
+        border-radius: 5px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3),
+          0 0 20px rgba(0, 0, 0, 0.1) inset;
+      }
     }
   }
 }
