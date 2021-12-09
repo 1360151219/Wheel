@@ -8,20 +8,28 @@
       v-show="!loaded"
       :class="{ first: firstLoading }"
     >
-      <slot name="loading" />
-      <template v-if="!hasLoadingSlot">
-        <div class="dot" v-for="n in loadingDotCount" :key="n"></div>
-      </template>
+      <slot name="loading"
+        ><div class="dot" v-for="n in loadingDotCount" :key="n"></div
+      ></slot>
     </div>
     <div class="vue-scroll-container" ref="scrollEl">
-      <div class="imgItem" v-for="(item, idx) in imgsArr_c" :key="idx">
-        <a :href="item.href"
-          ><img
+      <div
+        class="imgBox"
+        v-for="(item, idx) in imgsArr_c"
+        :key="idx"
+        @click="handleClick($event, { value: item, index: idx })"
+      >
+        <div :class="[imgClass]">
+          <div class="img-box-header" v-if="item.hasHeader">
+            <slot name="header" :data="item"></slot>
+          </div>
+          <img
             :src="item.src"
             :alt="item.info"
             :width="imgWidth"
             :height="item._height ? item._height + 'px' : false"
-        /></a>
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -44,11 +52,15 @@ export default class WaterFall extends Vue {
   loadingDotCount!: number;
   @Prop({ default: 100 })
   reachBottomDistance!: number;
+  @Prop({ default: 240 })
+  imgWidth!: number;
+  @Prop()
+  imgClass!: Array<string>; // 图片容器的类名数组
   //声明loadedCount变量记录加载完毕的数量，为了和imgsArr大小作比较，通知加载完毕（包括无图、加载完毕，加载失败的情况）
   loadedCnt = 0;
   loaded = false; // 正在预加载中，显示加载动画
   firstLoading = true;
-  imgWidth = 240;
+
   imgBoxEls: any;
   imgsArr_c: imgItem[] = []; // 等预加载好了之后 才开始加载
   beginIndex = 0;
@@ -60,7 +72,7 @@ export default class WaterFall extends Vue {
     // 添加响应式
     window.addEventListener("resize", this.response);
     setTimeout(() => {
-      (this.$refs.scrollEl as any).addEventListener(
+      (this.$refs.scrollEl as HTMLElement).addEventListener(
         "scroll",
         this.reachBottomed
       );
@@ -74,9 +86,6 @@ export default class WaterFall extends Vue {
         this.waterfall();
       });
     });
-  }
-  get hasLoadingSlot() {
-    return !!this.$slots.loading;
   }
   /**
    * @description: 预加载
@@ -100,7 +109,7 @@ export default class WaterFall extends Vue {
         this.imgsArr[index]._height =
           e.type == "load"
             ? Math.round(this.imgWidth * (oImg.height / oImg.width))
-            : this.imgWidth;
+            : 0; // 错误即无图模式
         if (e.type == "error") {
           this.imgsArr[index]._error = true;
           this.$emit("imgError", this.imgsArr[index]);
@@ -149,20 +158,10 @@ export default class WaterFall extends Vue {
     this.beginIndex = 0; // 复原清零
     this.waterfall();
   }
-  reachBottomed() {
-    if (!this.loaded) return;
-    const scrollEl = this.$refs.scrollEl as HTMLElement;
-    const scrollTop = scrollEl.scrollTop;
-    const height = scrollEl.offsetHeight;
-    const minHeight = Math.min(...this.colsHeightArr);
-    if (scrollTop + height - minHeight > this.reachBottomDistance) {
-      this.$emit("reachBottomed");
-      this.loaded = false;
-    }
-  }
+
   /* 核心方法 */
   waterfall() {
-    this.imgBoxEls = this.$root.$el.getElementsByClassName("imgItem");
+    this.imgBoxEls = this.$root.$el.getElementsByClassName("imgBox");
     if (!this.imgBoxEls) return;
     let top, left, height;
     let colWidth = this.ColWidth;
@@ -187,6 +186,20 @@ export default class WaterFall extends Vue {
       this.imgBoxEls[i].style.top = top + "px";
     }
     this.beginIndex = this.imgsArr.length;
+  }
+  handleClick(e: Event, { value, index }: { value: imgItem; index: number }) {
+    this.$emit("click", e, value, index);
+  }
+  reachBottomed() {
+    if (!this.loaded) return;
+    const scrollEl = this.$refs.scrollEl as HTMLElement;
+    const scrollTop = scrollEl.scrollTop;
+    const height = scrollEl.offsetHeight;
+    const minHeight = Math.min(...this.colsHeightArr);
+    if (scrollTop + height - minHeight > this.reachBottomDistance) {
+      this.$emit("reachBottomed");
+      this.loaded = false;
+    }
   }
 }
 </script>
@@ -249,7 +262,7 @@ export default class WaterFall extends Vue {
     overflow-x: hidden;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
-    .imgItem {
+    .imgBox {
       position: absolute;
       animation: show-item 0.4s;
       transition: top 0.6s, left 0.6s;

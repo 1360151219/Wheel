@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <div class="waterfall">
-      <Waterfall :imgsArr="imgs" @reachBottomed="reachBottomed">
-        <template slot="loading"> <span>loading</span> </template>
+      <Waterfall :imgsArr="imgs" @reachBottomed="reachBottomed" @click="click">
+        <template slot="header"> <span>header</span> </template>
       </Waterfall>
     </div>
   </div>
@@ -21,15 +21,20 @@ export default class Home extends Vue {
   reachBottomed() {
     this.imgs.push(...this.imgs.concat());
   }
+  click(e: Event, value: any, index: number) {
+    console.log(e, value, index);
+  }
   imgs = [
     {
       src: "https://gimg2.baid=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20180211%2F00%2F1518279736-ImsfeASJcb.jpg&refer=http%3A%2F%2Fimage.biaobaiju.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638440861&t=401c068f0a25ed2a42a4b070c6ee6a96",
       href: "https://www.baidu.com",
       info: "一些图片描述文字",
+      hasHeader: true,
     },
     {
       src: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fq_70%2Cc_zoom%2Cw_640%2Fimages%2F20190210%2F8534c3170a314d83b104d04aa120a040.jpeg&refer=http%3A%2F%2F5b0988e595225.cdn.sohucs.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638440861&t=d15af814c4ae34b95bc60e35efc88e4c",
       href: "https://www.baidu.com",
+      hasHeader: true,
       info: "一些图片描述文字",
     },
     {
