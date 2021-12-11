@@ -18,6 +18,12 @@
 
 - [Debounce&Throttle](https://github.com/1360151219/Wheel/blob/master/Debounce.ts)
 
-基于Vue实现的一个瀑布流组件
+基于 Vue 实现的一个瀑布流组件
 
 - [瀑布流](https://github.com/1360151219/Wheel/tree/master/Waterfall-Image/waterfall)
+
+基于 Vue 实现的一个自定义表情包插件
+
+我们的树洞 1.2v 将要在评论引入表情包功能，因此我自己试着写了下....
+
+- [vue-emoji](https://github.com/1360151219/Wheel/tree/master/emoji)
