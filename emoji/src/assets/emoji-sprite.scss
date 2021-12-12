@@ -1,7 +1,7 @@
 [class*="sprite-"] {
-  width:25px;
+  width: 25px;
   height: 25px;
-  background: url('https://github.com/jkchao/vue-emoji/raw/master/static/thumb/vue-emoji.png');
+  background: url(../assets/vue-emoji.png); // 以引用文件的路径为根，即EmojiContainer
   background-repeat: no-repeat;
   vertical-align: top;
   display: inline-block;

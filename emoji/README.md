@@ -1,29 +1,5 @@
 # emoji
 
-## Project setup
-```
-npm install
-```
+一个自定义表情包组件。利用自己封装的方法来实现表情包和字符串之间的转义！！
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![](./ex.gif)

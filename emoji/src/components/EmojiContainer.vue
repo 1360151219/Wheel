@@ -1,5 +1,10 @@
 <template>
-  <div class="vue-emoji-container">
+  <div
+    class="vue-emoji-container"
+    :class="[positionClass]"
+    :style="{ width }"
+    v-show="isShow"
+  >
     <ul class="vue-emoji-controller">
       <li
         v-for="(pannel, index) in pannels"
@@ -36,6 +41,12 @@ import data from "@/datas";
 import { emojiModel } from "@/utils";
 @Component
 export default class EmojiContainer extends Vue {
+  @Prop()
+  width!: number;
+  @Prop({ default: true })
+  isShow!: boolean;
+  @Prop()
+  positionClass!: string;
   activeIndex = 0;
   pannels: string[] = [];
   emojis: emojiModel[] = [];
@@ -64,10 +75,11 @@ export default class EmojiContainer extends Vue {
 .vue-emoji-container {
   width: 100%;
   border-radius: 15px;
-  box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+  box-shadow: rgb(0 0 0 / 30%) 0px 2px 12px;
   .vue-emoji-controller {
     height: 36px;
     overflow: hidden;
+    padding: 8px;
     margin-bottom: 0;
     li {
       float: left;
@@ -94,6 +106,7 @@ export default class EmojiContainer extends Vue {
     overflow-y: auto;
     overflow-x: hidden;
     position: relative;
+    padding: 6px;
     li {
       font-size: 0;
       p {
