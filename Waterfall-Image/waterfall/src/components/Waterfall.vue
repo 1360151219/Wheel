@@ -1,16 +1,9 @@
   <template>
-  <div
-    class="vue-waterfall-container"
-    :style="{ width: width + 'px', height: height + 'px' }"
-  >
-    <div
-      class="loading ball-beat"
-      v-show="!loaded"
-      :class="{ first: firstLoading }"
-    >
-      <slot name="loading"
-        ><div class="dot" v-for="n in loadingDotCount" :key="n"></div
-      ></slot>
+  <div class="vue-waterfall-container" :style="{ width: width + 'px', height: height + 'px' }">
+    <div class="loading ball-beat" v-show="!loaded" :class="{ first: firstLoading }">
+      <slot name="loading">
+        <div class="dot" v-for="n in loadingDotCount" :key="n"></div>
+      </slot>
     </div>
     <div class="vue-scroll-container" ref="scrollEl">
       <div
@@ -41,11 +34,11 @@
 
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from "vue-property-decorator";
-import { imgItem } from "@/models";
+import { Img } from "@/models";
 @Component
 export default class WaterFall extends Vue {
   @Prop()
-  imgsArr!: imgItem[];
+  imgsArr!: Img[];
   @Prop()
   width?: number; // 瀑布流容器总宽度
   @Prop()
@@ -72,7 +65,7 @@ export default class WaterFall extends Vue {
   firstLoading = true;
 
   imgBoxEls: any;
-  imgsArr_c: imgItem[] = []; // 等预加载好了之后 才开始加载
+  imgsArr_c: Img[] = []; // 等预加载好了之后 才开始加载
   beginIndex = 0;
   colsHeightArr: number[] = [];
   cols = NaN;
@@ -144,7 +137,7 @@ export default class WaterFall extends Vue {
     this.loadedCnt = 0;
   }
   @Watch("imgsArr")
-  onImgsArrChange(newVal: imgItem[], old: imgItem[]) {
+  onImgsArrChange(newVal: Img[], old: Img[]) {
     if (this.imgsArr_c.length > newVal.length) {
       this.reset();
     }
@@ -197,7 +190,7 @@ export default class WaterFall extends Vue {
     }
     this.beginIndex = this.imgsArr.length;
   }
-  handleClick(e: Event, { value, index }: { value: imgItem; index: number }) {
+  handleClick(e: Event, { value, index }: { value: Img; index: number }) {
     this.$emit("click", e, value, index);
   }
   reachBottomed() {

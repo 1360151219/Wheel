@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="waterfall">
-      <Waterfall :imgsArr="imgs" @reachBottomed="reachBottomed" @click="click">
+      <Waterfall :imgsArr="dataList" @reachBottomed="reachedBottom" @click="click">
         <template v-slot:header="item">
           <span>{{ item.data.info + "Header" }}</span>
         </template>
@@ -16,20 +16,19 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import Waterfall from "@/components/Waterfall.vue"; // @ is an alias to /src
-
+import { AutoLoader, loaderReachedBottom } from "@/utils";
+import { Img } from "@/models";
 @Component({
   components: {
     Waterfall,
   },
 })
-export default class Home extends Vue {
-  reachBottomed() {
-    this.imgs.push(...this.imgs.concat());
-  }
-  click(e: Event, value: any, index: number) {
-    console.log(e, value, index);
-  }
-  imgs = [
+export default class Home extends Vue implements AutoLoader<Img> {
+  loading = false
+  page = 0
+  pageSize = 10
+  nomore = false
+  dataList = [
     {
       src: "https://gimg2.baid=http%3A%2F%2Fimage.biaobaiju.com%2Fuploads%2F20180211%2F00%2F1518279736-ImsfeASJcb.jpg&refer=http%3A%2F%2Fimage.biaobaiju.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1638440861&t=401c068f0a25ed2a42a4b070c6ee6a96",
       href: "https://www.baidu.com",
@@ -152,6 +151,18 @@ export default class Home extends Vue {
       info: "一些图片描述文字",
     },
   ];
+  reachedBottom() {
+    loaderReachedBottom(this, q => {
+      return new Promise((r, j) => {
+        r(this.dataList.concat())
+      })
+    })
+
+  }
+  click(e: Event, value: any, index: number) {
+    console.log(e, value, index);
+  }
+
 }
 </script>
 <style scoped>

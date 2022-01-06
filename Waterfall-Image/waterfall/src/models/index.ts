@@ -1,4 +1,4 @@
-export interface imgItem {
+export interface Img {
     src: string;
     href?: string
     info?: string

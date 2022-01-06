@@ -1,9 +1,19 @@
 <template>
   <div id="app">
-    <router-view />
+    <router-view ref="loader" />
   </div>
 </template>
+<script lang="ts">
+import { isreachedBottom } from '@/utils'
+import Vue from 'vue'
+import Component from 'vue-class-component'
+@Component
+export default class App extends Vue {
 
+}
+
+
+</script>
 <style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

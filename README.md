@@ -27,3 +27,13 @@
 我们的树洞 1.2v 将要在评论引入表情包功能，因此我自己试着写了下....
 
 - [vue-emoji](https://github.com/1360151219/Wheel/tree/master/emoji)
+
+参考学长的轮子实现的一个 AutoLoader 组件。（有些许的修改）
+
+主要思路：判断触底，触底则执行加载函数（这里要根据`nomore`、`loading`来提前退出）。当执行用户传入的获取数据接口时，还需要将获取到的新数据 push 进原本的`dataList`中。
+
+测试用法（在瀑布流组件中有使用示例）：
+
+![](./loader/example.png)
+
+- [AutoLoader](https://github.com/1360151219/Wheel/tree/master/loader)
