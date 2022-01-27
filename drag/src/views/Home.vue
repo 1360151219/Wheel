@@ -1,5 +1,5 @@
 <template>
-  <Drag title="App Title" content="<div>this is html str in App</div>"></Drag>
+  <Drag title="App Title" content="<div>this is html str in App</div>" :timeout="2000"></Drag>
 </template>
 
 

@@ -1,17 +1,19 @@
 <template>
-  <div :class="propClass" id="vue-drag" @mousedown="mouseDown">
-    <div class="leftTop" @mousedown="resize"></div>
-    <div class="leftBottom" @mousedown="resize"></div>
-    <div class="rightTop" @mousedown="resize"></div>
-    <div class="rightBottom" @mousedown="resize"></div>
-    <div class="vue-drag-title">
-      <span>{{ title }}</span>
+  <transition name="fade">
+    <div :class="propClass" id="vue-drag" @mousedown="_mouseDown" v-show="isShow">
+      <div class="leftTop" @mousedown="_resize"></div>
+      <div class="leftBottom" @mousedown="_resize"></div>
+      <div class="rightTop" @mousedown="_resize"></div>
+      <div class="rightBottom" @mousedown="_resize"></div>
+      <div class="vue-drag-title">
+        <span>{{ title }}</span>
+      </div>
+      <div class="vue-drag-content">
+        <div v-if="!_isHtml">{{ content }}</div>
+        <div v-else v-html="content"></div>
+      </div>
     </div>
-    <div class="vue-drag-content">
-      <div v-if="!isHtml">{{ content }}</div>
-      <div v-else v-html="content"></div>
-    </div>
-  </div>
+  </transition>
 </template>
 
 <script setup lang="ts">
@@ -20,20 +22,30 @@ interface Props {
   propClass: string,
   crashLimit: number,
   title: string,
-  content: string
+  content: string,
+  isShow?: boolean,
+  timeout?: number
 }
-let isHtml = ref(false);
 const props = withDefaults(defineProps<Props>(), {
   propClass: 'drag',
   crashLimit: 10,
   title: 'default title',
-  content: 'default content'
+  content: 'default content',
+  isShow: true
 })
+let _isHtml = ref(false);
+let isShow = ref(true)
 if (props.content.match(/<[^>]+>.*<\/[^>]+>/).input) {
-  isHtml.value = true
+  _isHtml.value = true
 }
+if (props.timeout) {
+  setTimeout(() => {
+    isShow.value = false
+  }, props.timeout)
+}
+
 // 拖拽
-function mouseDown(e) {
+function _mouseDown(e: MouseEvent) {
   const Drag = document.getElementById('vue-drag')
   const ev = e
   const X = ev.clientX - Drag.offsetLeft
@@ -49,7 +61,7 @@ function mouseDown(e) {
     document.onmousemove = null
   }
 }
-function resize(e) {
+function _resize(e: MouseEvent) {
   e.stopPropagation()
   const ev = e || window.event
   const Drag = document.getElementById('vue-drag')
@@ -149,5 +161,14 @@ function resize(e) {
     height: calc(100% - 66px);
     background-color: #fff;
   }
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.8s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
